@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xo_game/business_logic/cubit.dart';
@@ -15,17 +16,17 @@ class HomeScreen extends StatelessWidget{
           listener:(context,state) {
             if( state is GameFinishedWithWinnerState )
             {
-              ScaffoldMessenger.of(context).showSnackBar(snackBarContent(message: "Game finished, Winner is ${state.winner}", backgroundColor: Colors.green));
-              GameCubit.getInstance(context).gameInitialization();
+              awesomeDialog(context,"The Winner is ${state.winner}",DialogType.success,Colors.green,"Congratulations");
+              GameCubit.getInstance(context).gameInitialization();  // Todo: to restart The Game
             }
             else if( state is GameFinishedWithoutWinnerState )
             {
-              GameCubit.getInstance(context).gameInitialization();
-              ScaffoldMessenger.of(context).showSnackBar(snackBarContent(message: "Game finished without Winner !", backgroundColor: Colors.red));
+              awesomeDialog(context,"Game finished without Winner !",DialogType.error,Colors.red,"Game Over");
+              GameCubit.getInstance(context).gameInitialization();   // Todo: to restart The Game
             }
             else if( state is BoxAlreadyHaveDataState )
             {
-              ScaffoldMessenger.of(context).showSnackBar(snackBarContent(message: "This Box already has Data !", backgroundColor: Colors.red));
+              awesomeDialog(context,"This Box already has Data !",DialogType.warning,Colors.red,"Warning");
             }
           },
           builder: (context,state) {
@@ -73,6 +74,7 @@ class HomeScreen extends StatelessWidget{
     );
   }
 
+  // Todo: used on The Row( current player : playerName )
   Widget playerItem(String title,double fontSize,FontWeight fontWeight,Color color){
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
@@ -117,7 +119,7 @@ class HomeScreen extends StatelessWidget{
         child: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeIn,
-          style: const TextStyle(fontSize: 30,fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 35,fontWeight: FontWeight.bold),
           child: Text(
               cubit.boxesData[index] == cubit.player1 ? cubit.player1 :
               cubit.boxesData[index] == cubit.player2 ? cubit.player2 : ""
