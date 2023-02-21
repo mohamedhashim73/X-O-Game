@@ -4,9 +4,9 @@ import 'states.dart';
 
 class GameCubit extends Cubit<GameStates>{
   GameCubit() : super(InitialAppState());
-  String currentPlayer = "x";
-  String winner = "";
-  int filledBoxesNumber = 0 ;
+  late String currentPlayer;
+  late String winner;
+  late int filledBoxesNumber;
   String player1 = "X";
   String player2 = "O";
   List<String> boxesData = ["","","","","","","","",""];
@@ -47,7 +47,6 @@ class GameCubit extends Cubit<GameStates>{
             emit(MoveToAnotherPlayerState());
             // Todo: Check if The Game finished or not
             bool oneOfThePlayersWin = await checkTheEndOfTheGame();
-            debugPrint("One of The Players win is : $oneOfThePlayersWin ......... Winner is $winner ..........");
             if( oneOfThePlayersWin )
               {
                 debugPrint("Data on Boxes is $boxesData");
@@ -63,15 +62,6 @@ class GameCubit extends Cubit<GameStates>{
           {
             emit(BoxAlreadyHaveDataState( message : "This Box already have Data !") );
           }
-      }
-    else   // Todo: filled = 8 (( Mean that this is will be the last click as first 8 boxes have Data ))
-      {
-        boxesData[index] = currentPlayer;
-        // Check if True return There is a winner not return Game Finished without Winner
-        // Todo: Call checkGameEndMethod
-        bool oneOfThemWin = await checkTheEndOfTheGame();
-        oneOfThemWin ? emit(GameFinishedWithWinnerState(winner: winner)) : emit(GameFinishedWithoutWinnerState());
-        emit(AllBoxesFilledWithDataState());
       }
   }
 

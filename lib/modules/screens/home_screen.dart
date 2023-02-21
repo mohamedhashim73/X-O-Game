@@ -16,17 +16,36 @@ class HomeScreen extends StatelessWidget{
           listener:(context,state) {
             if( state is GameFinishedWithWinnerState )
             {
-              awesomeDialog(context,"The Winner is ${state.winner}",DialogType.success,Colors.green,"Congratulations");
-              GameCubit.getInstance(context).gameInitialization();  // Todo: to restart The Game
+              awesomeDialog(
+                  context:context,
+                  message:"The Winner is ${state.winner}",
+                  dialogType:DialogType.success,
+                  messageColor: Colors.green,
+                  dialogTitle: "Congratulations",
+                  gameEnd: true
+              );
             }
             else if( state is GameFinishedWithoutWinnerState )
             {
-              awesomeDialog(context,"Game finished without Winner !",DialogType.error,Colors.red,"Game Over");
-              GameCubit.getInstance(context).gameInitialization();   // Todo: to restart The Game
+              awesomeDialog(
+                  context:context,
+                  message:"Game finished without Winner !",
+                  dialogType:DialogType.error,
+                  messageColor: Colors.red,
+                  dialogTitle: "Game Over",
+                  gameEnd: true
+              );
             }
             else if( state is BoxAlreadyHaveDataState )
             {
-              awesomeDialog(context,"This Box already has Data !",DialogType.warning,Colors.red,"Warning");
+              awesomeDialog(
+                  context:context,
+                  message:"This Box already has Data !",
+                  dialogType:DialogType.warning,
+                  messageColor: Colors.red,
+                  dialogTitle: "Warning",
+                  gameEnd: false
+              );
             }
           },
           builder: (context,state) {

@@ -1,45 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import '../../business_logic/cubit.dart';
 
-SnackBar snackBarContent({required String message,required Color backgroundColor}){
-  return SnackBar(
-    duration: const Duration(seconds: 1),
-    margin: const EdgeInsets.symmetric(horizontal: 15,vertical: 30),
-    behavior: SnackBarBehavior.floating,
-    elevation: 0,
-    backgroundColor: backgroundColor,
-    content: Container(
-      width: double.infinity,
-      height: 35,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8)
-      ),
-      alignment: Alignment.center,
-      child: FittedBox(fit:BoxFit.scaleDown,child: Text(message,style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 17.5),)),
-    ),
-  );
-}
-
-void showAlertDialog({required BuildContext context,required String message,required Color messageColor}){
-  showDialog(context: context, builder: (context) => AlertDialog(
-      backgroundColor: Colors.grey.shade200,
-      contentPadding: const EdgeInsets.symmetric(vertical: 25,horizontal: 20),
-      alignment: Alignment.center,
-      contentTextStyle: TextStyle(color: messageColor,fontWeight: FontWeight.w600,fontSize: 19.5),
-      content : Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children:
-        [
-          FittedBox(fit:BoxFit.scaleDown,child: Text(message))
-        ],
-      )
-  )
-  );
-}
-
-AwesomeDialog awesomeDialog(BuildContext context,String message,DialogType dialogType,Color messageColor,String dialogTitle){
+AwesomeDialog awesomeDialog({required BuildContext context,required String message,required DialogType dialogType,required Color messageColor,required String dialogTitle,required bool gameEnd}){
   return AwesomeDialog(
       context: context,
       dialogType: dialogType,
@@ -48,7 +11,21 @@ AwesomeDialog awesomeDialog(BuildContext context,String message,DialogType dialo
       titleTextStyle: TextStyle(color: messageColor,fontWeight: FontWeight.bold,fontSize: 19),
       desc: message,
       descTextStyle: TextStyle(fontWeight: FontWeight.w600,fontSize: 17,color: Colors.black.withOpacity(0.5)),
-      btnCancelOnPress: () {},
-      btnOkOnPress: () {},
+      btnCancelOnPress: ()
+      {
+        // Todo: As I will call this Widget when user click n box that already have Data so this method will call if only Game has finished
+        if( gameEnd == true )
+          {
+            GameCubit.getInstance(context).gameInitialization();
+          }
+      },
+      btnOkOnPress: ()
+      {
+        // Todo: As I will call this Widget when user click n box that already have Data so this method will call if only Game has finished
+        if( gameEnd == true )
+        {
+          GameCubit.getInstance(context).gameInitialization();
+        }
+      },
   )..show();
 }
